@@ -12,6 +12,8 @@ hyperparameter. Some cleaners are English-specific. You'll typically want to use
      the symbols in symbols.py to match your data).
 '''
 
+import arabic_reshaper
+from bidi.algorithm import get_display
 import re
 from unidecode import unidecode
 from .numbers import normalize_numbers
@@ -80,12 +82,25 @@ def transliteration_cleaners(text):
   return text
 
 
+# def english_cleaners(text):
+#   '''Pipeline for English text, including number and abbreviation expansion.'''
+#   text = convert_to_ascii(text)
+#   text = lowercase(text)
+#   text = expand_numbers(text)
+#   text = expand_abbreviations(text)
+#   text = collapse_whitespace(text)
+#   text = text.replace('"', '')
+#   return text
 def english_cleaners(text):
-  '''Pipeline for English text, including number and abbreviation expansion.'''
-  text = convert_to_ascii(text)
-  text = lowercase(text)
-  text = expand_numbers(text)
-  text = expand_abbreviations(text)
-  text = collapse_whitespace(text)
-  text = text.replace('"', '')
-  return text
+    # Step 1: Normalize the text
+    
+    # Step 2: Handle RTL reshaping
+    text = arabic_reshaper.reshape(text)
+    text = get_display(text)
+    # Step 3: Remove diacritics (optional)
+    text = re.sub(r'[\u064B-\u0652]', '', text)  # This removes diacritics (tashkeel)
+    # Step 4: Collapse whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    # Step 5: Remove punctuation (optional)
+    text = re.sub(r'[^\w\s]', '', text)  # Remove non-word characters except spaces
+    return text
