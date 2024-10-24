@@ -34,8 +34,7 @@ tgt
 pyworld
 audio2numpy
 SoundFile
-arabic-reshaper
-python-bidi
+
 # For text stuff
 transformers==4.29.2
 tokenizers

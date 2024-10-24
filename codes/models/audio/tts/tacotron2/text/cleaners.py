@@ -95,12 +95,8 @@ def english_cleaners(text):
     # Step 1: Normalize the text
     
     # Step 2: Handle RTL reshaping
-    text = arabic_reshaper.reshape(text)
-    text = get_display(text)
-    # Step 3: Remove diacritics (optional)
-    text = re.sub(r'[\u064B-\u0652]', '', text)  # This removes diacritics (tashkeel)
-    # Step 4: Collapse whitespace
-    text = re.sub(r'\s+', ' ', text).strip()
-    # Step 5: Remove punctuation (optional)
-    text = re.sub(r'[^\w\s]', '', text)  # Remove non-word characters except spaces
+    text = re.sub(r'[إأٱآ]', 'ا', text)  # normalize hamzas
+    text = re.sub(r'ى', 'ي', text)      # normalize alef maqsura
+    text = re.sub(r'ؤ', 'و', text)      # normalize waw hamza
+    text = re.sub(r'ة', 'ه', text) # Remove non-word characters except spaces
     return text
